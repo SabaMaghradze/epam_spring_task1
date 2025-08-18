@@ -7,7 +7,7 @@ public final class UsernamePasswordUtil {
     private static final String ALPHANUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final SecureRandom RND = new SecureRandom();
 
-    public static String randomPassword() {
+    public static String randomPassword10() {
 
         StringBuilder sb = new StringBuilder(10);
 
