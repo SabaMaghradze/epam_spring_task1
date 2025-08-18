@@ -1,0 +1,46 @@
+package com.example.gym.service;
+
+import com.example.gym.dao.TraineeDao;
+import com.example.gym.dao.TrainerDao;
+import com.example.gym.model.Trainee;
+
+public class TrainerServiceTest {
+
+    @Test
+    void createsUsernameAndPasswordAndId() {
+        TraineeDao dao = mock(TraineeDao.class);
+        when(dao.findByName("John","Doe")).thenReturn(List.of()); // no duplicates
+
+        TraineeService svc = new TraineeService();
+        svc.setTraineeDao(dao);
+
+        Trainee t = new Trainee();
+        t.setFirstName("John");
+        t.setLastName("Doe");
+        t.setDateOfBirth(LocalDate.of(2000,1,1));
+
+        Trainee created = svc.create(t);
+
+        assertNotNull(created.getId());
+        assertEquals("John.Doe", created.getUsername());
+        assertNotNull(created.getPassword());
+        assertEquals(10, created.getPassword().length());
+        verify(dao).create(created.getId(), created);
+    }
+
+    @Test
+    void appendsSerialWhenDuplicateNameExists() {
+        TrainerDao dao = mock(TraineeDao.class);
+        when(dao.findByName("John","Doe")).thenReturn(List.of(new Trainee(), new Trainee()));
+
+        TraineeService svc = new TraineeService();
+        svc.setTraineeDao(dao);
+
+        Trainee t = new Trainee();
+        t.setFirstName("John"); t.setLastName("Doe");
+
+        Trainee created = svc.create(t);
+        assertTrue(created.getUsername().startsWith("John.Doe"));
+        assertTrue(created.getUsername().matches("John\\.Doe\\d+"));
+    }
+}
