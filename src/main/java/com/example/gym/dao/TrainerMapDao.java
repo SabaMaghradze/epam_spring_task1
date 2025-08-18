@@ -6,7 +6,7 @@ import com.example.gym.storage.InMemoryStorage;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TrainerDaoMap extends MapCrudDao<Trainer> implements TrainerDao {
+public class TrainerMapDao extends MapCrudDao<Trainer> implements TrainerDao {
 
     private InMemoryStorage<Trainer> storage;
 
