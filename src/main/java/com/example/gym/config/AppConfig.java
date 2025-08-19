@@ -2,18 +2,17 @@ package com.example.gym.config;
 
 import com.example.gym.dao.*;
 import com.example.gym.facade.GymFacade;
-import com.example.gym.model.Trainee;
-import com.example.gym.model.Trainer;
-import com.example.gym.model.Training;
 import com.example.gym.service.TraineeService;
 import com.example.gym.service.TrainerService;
 import com.example.gym.service.TrainingService;
 import com.example.gym.storage.InMemoryStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class AppConfig {
 
     @Bean
@@ -32,7 +31,6 @@ public class AppConfig {
     @Bean public InMemoryStorage<com.example.gym.model.Training> trainingStorage() {
         return new InMemoryStorage<>();
     }
-
 
     @Bean public TraineeDao traineeDao(InMemoryStorage<com.example.gym.model.Trainee> storage) {
         TraineeMapDao dao = new TraineeMapDao();
@@ -58,11 +56,13 @@ public class AppConfig {
         s.setTraineeDao(dao);
         return s;
     }
+
     @Bean public TrainerService trainerService(TrainerDao dao) {
         TrainerService s = new TrainerService();
         s.setTrainerDao(dao);
         return s;
     }
+
     @Bean public TrainingService trainingService(TrainingDao dao) {
         TrainingService s = new TrainingService();
         s.setTrainingDao(dao);
@@ -74,7 +74,7 @@ public class AppConfig {
         return new GymFacade(a, b, c);
     }
 
-    @Bean public StorageInitPostProcessor storageInitPostProcessor() {
+    @Bean public static StorageInitPostProcessor storageInitPostProcessor() {
         return new StorageInitPostProcessor();
     }
 }
