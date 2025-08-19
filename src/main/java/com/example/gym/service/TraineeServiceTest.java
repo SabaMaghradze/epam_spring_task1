@@ -3,11 +3,18 @@ package com.example.gym.service;
 import com.example.gym.dao.TraineeDao;
 import com.example.gym.model.Trainee;
 
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
 
 public class TraineeServiceTest {
 
     @Test
-    void createsUsernameAndPasswordAndId() {
+    public void createsUsernameAndPasswordAndId() {
         TraineeDao dao = mock(TraineeDao.class);
         when(dao.findByName("John","Doe")).thenReturn(List.of()); // no duplicates
 
@@ -29,7 +36,7 @@ public class TraineeServiceTest {
     }
 
     @Test
-    void appendsSerialWhenDuplicateNameExists() {
+    public void appendsSerialWhenDuplicateNameExists() {
         TraineeDao dao = mock(TraineeDao.class);
         when(dao.findByName("John","Doe")).thenReturn(List.of(new Trainee(), new Trainee()));
 

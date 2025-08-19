@@ -1,25 +1,32 @@
 package com.example.gym.service;
 
-import com.example.gym.dao.TraineeDao;
 import com.example.gym.dao.TrainerDao;
-import com.example.gym.model.Trainee;
+
+import java.util.List;
+
+import com.example.gym.model.Trainer;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+
 
 public class TrainerServiceTest {
 
     @Test
     void createsUsernameAndPasswordAndId() {
-        TraineeDao dao = mock(TraineeDao.class);
+        TrainerDao dao = mock(TrainerDao.class);
         when(dao.findByName("John","Doe")).thenReturn(List.of()); // no duplicates
 
-        TraineeService svc = new TraineeService();
-        svc.setTraineeDao(dao);
+        TrainerService svc = new TrainerService();
+        svc.setTrainerDao(dao);
 
-        Trainee t = new Trainee();
+        Trainer t = new Trainer();
         t.setFirstName("John");
         t.setLastName("Doe");
-        t.setDateOfBirth(LocalDate.of(2000,1,1));
 
-        Trainee created = svc.create(t);
+        Trainer created = svc.create(t);
 
         assertNotNull(created.getId());
         assertEquals("John.Doe", created.getUsername());
@@ -30,16 +37,16 @@ public class TrainerServiceTest {
 
     @Test
     void appendsSerialWhenDuplicateNameExists() {
-        TrainerDao dao = mock(TraineeDao.class);
-        when(dao.findByName("John","Doe")).thenReturn(List.of(new Trainee(), new Trainee()));
+        TrainerDao dao = mock(TrainerDao.class);
+        when(dao.findByName("John","Doe")).thenReturn(List.of(new Trainer(), new Trainer()));
 
-        TraineeService svc = new TraineeService();
-        svc.setTraineeDao(dao);
+        TrainerService trainerService = new TrainerService();
+        trainerService.setTrainerDao(dao);
 
-        Trainee t = new Trainee();
+        Trainer t = new Trainer();
         t.setFirstName("John"); t.setLastName("Doe");
 
-        Trainee created = svc.create(t);
+        Trainer created = trainerService.create(t);
         assertTrue(created.getUsername().startsWith("John.Doe"));
         assertTrue(created.getUsername().matches("John\\.Doe\\d+"));
     }

@@ -3,7 +3,9 @@ package com.example.gym.config;
 import com.example.gym.model.Trainee;
 import com.example.gym.model.Trainer;
 import com.example.gym.storage.InMemoryStorage;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -12,9 +14,9 @@ import org.springframework.core.io.ResourceLoader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
+
 
 public class StorageInitPostProcessor implements BeanPostProcessor {
 
@@ -55,7 +57,7 @@ public class StorageInitPostProcessor implements BeanPostProcessor {
                 t.setAddress(a[5]);
                 t.setUsername(a[2]+"."+a[3]); // base; real service will generate when creating new ones
                 t.setPassword("initInit00");
-                st.data().put(t.getId(), t);
+                st.getData().put(t.getId(), t);
             });
         }
     }
