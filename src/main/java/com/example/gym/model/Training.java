@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Training {
+
     private Long id;
     private Long traineeId;
     private Long trainerId;
