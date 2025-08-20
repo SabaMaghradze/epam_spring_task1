@@ -20,11 +20,11 @@ public class AppConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Bean public InMemoryStorage<com.example.gym.model.Trainer> traineeStorage() {
+    @Bean public InMemoryStorage<com.example.gym.model.Trainee> traineeStorage() {
         return new InMemoryStorage<>();
     }
 
-    @Bean public InMemoryStorage<com.example.gym.model.Trainee> trainerStorage() {
+    @Bean public InMemoryStorage<com.example.gym.model.Trainer> trainerStorage() {
         return new InMemoryStorage<>();
     }
 
