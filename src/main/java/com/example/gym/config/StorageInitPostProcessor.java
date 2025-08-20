@@ -52,10 +52,11 @@ public class StorageInitPostProcessor implements BeanPostProcessor {
                 String[] a = l.split(",", -1);
                 Trainee t = new Trainee();
                 t.setId(traineeId.getAndIncrement());
-                t.setFirstName(a[2]); t.setLastName(a[3]);
+                t.setFirstName(a[2]);
+                t.setLastName(a[3]);
                 t.setDateOfBirth(LocalDate.parse(a[4]));
                 t.setAddress(a[5]);
-                t.setUsername(a[2]+"."+a[3]); // base; real service will generate when creating new ones
+                t.setUsername(a[2] + "." + a[3]); // base; real service will generate when creating new ones
                 t.setPassword("initInit00");
                 st.getData().put(t.getId(), t);
             });
@@ -69,9 +70,10 @@ public class StorageInitPostProcessor implements BeanPostProcessor {
                 String[] a = l.split(",", -1);
                 Trainer t = new Trainer();
                 t.setId(trainerId.getAndIncrement());
-                t.setFirstName(a[2]); t.setLastName(a[3]);
+                t.setFirstName(a[2]);
+                t.setLastName(a[3]);
                 t.setSpecialization(a[4]);
-                t.setUsername(a[2]+"."+a[3]);
+                t.setUsername(a[2] + "." + a[3]);
                 t.setPassword("initInit00");
                 st.getData().put(t.getId(), t);
             });

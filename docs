@@ -1,0 +1,74 @@
+InMemoryStorage.java
+
+basically serves as a database.
+
+private final Map<Long, T> data = new ConcurrentHashMap<>();
+
+Key (Long) → acts as a unique identifier for each object (id of Trainer, Trainee, or Training).
+Value (T) → stores the entire object (all its fields).
+
+Without generics, we would need one separate storage class for each entity type, or use Map<Long, Object> (less type-safe).
+
+--------------------------------------------------------------------------------------------
+
+CrudDao.java (interface) and MapCrudDao
+
+Defines generic CRUD operations (Create, Read, Update, Delete) for any type T.
+You can implement it once and use it for Trainer, Trainee, Training without rewriting the CRUD methods.
+
+MapCrudDao<T> (implementation)
+Implements the CRUD operations against the InMemoryStorage.
+
+Uses setter-based injection to get the correct storage bean.
+
+they basically serve as a JPA repository
+
+---------------------------------------------------------------
+
+TrainingDao, TrainerDao, TraineeDao.
+
+These are repositories, extending JPA repository (in our case CrudDao)
+
+CrudDao<Trainer> already provides the generic CRUD methods: create, update, delete, findById, findAll.
+By extending it, TrainerDao inherits all those methods automatically.
+You don’t have to rewrite findAllTrainers() or deleteTrainer(id) — they come from CrudDao.
+
+List<Trainer> findByName(String first, String last);
+This is a custom method specific to Trainers.
+
+The generic DAO can’t know about firstName/lastName fields, so you add it here.
+
+Same for TraineeDao and TrainingDao — they have their own entity-specific queries:
+findByTrainee(traineeId) → get all trainings for a trainee
+findByTrainer(trainerId) → get all trainings for a trainer
+
+| our project                               | Spring Data JPA equivalent                                                   |
+| ----------------------------------------- | ---------------------------------------------------------------------------- |
+| `CrudDao<T>` (interface)                  | `JpaRepository<T, ID>` — generic CRUD methods                                |
+| `MapCrudDao<T>` (implementation)          | The Spring-provided implementation behind the scenes (`SimpleJpaRepository`) |
+| `TrainerDao`, `TraineeDao`, `TrainingDao` | Repositories extending `JpaRepository` with **custom methods**               |
+
+-----------------------------------------------------------------------------
+
+TraineeMapDao / TrainerMapDao / TrainingMapDao
+
+They extend MapCrudDao<T>, which already has generic CRUD operations (create, update, delete, findById, findAll).
+
+They implement their entity-specific DAO interface (TraineeDao, TrainerDao, TrainingDao) which has
+extra methods like findByName or findByTrainer.
+
+So each of these classes combines:
+1. Generic CRUD from MapCrudDao
+2. Entity-specific queries from their interface
+
+Why they have their own storage field
+
+Each DAO needs a reference to the correct InMemoryStorage bean.
+They store it locally (this.storage) for the custom query methods (findByName, findByTrainer).
+They also pass it to MapCrudDao using super.setStorage(storage) so the generic CRUD methods work.
+
+Basically, they connect the DAO to the correct “table” in memory.
+
+MapCrudDao<T> → generic CRUD logic
+XxxMapDao → entity-specific queries + wiring the correct storage
+

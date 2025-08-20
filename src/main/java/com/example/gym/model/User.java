@@ -5,10 +5,15 @@ import java.util.Objects;
 public class User {
 
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
     private String username; // generated
+
     private String password; // generated
+
     private boolean active = true;
 
     public Long getId() {
