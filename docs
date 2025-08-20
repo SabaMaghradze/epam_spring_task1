@@ -72,3 +72,11 @@ Basically, they connect the DAO to the correct “table” in memory.
 MapCrudDao<T> → generic CRUD logic
 XxxMapDao → entity-specific queries + wiring the correct storage
 
+--------------------------------------------------------------------------------------------------------
+
+Service layer
+
+private TrainingDao trainingDao;
+The service depends on an interface (TrainingDao), not the implementation (TrainingMapDao).
+This is the Dependency Inversion Principle (part of SOLID).
+
