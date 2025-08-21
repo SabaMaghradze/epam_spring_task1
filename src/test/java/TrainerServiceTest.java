@@ -1,10 +1,9 @@
-package com.example.gym.service;
-
 import com.example.gym.dao.TrainerDao;
 
 import java.util.List;
 
 import com.example.gym.model.Trainer;
+import com.example.gym.service.TrainerService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

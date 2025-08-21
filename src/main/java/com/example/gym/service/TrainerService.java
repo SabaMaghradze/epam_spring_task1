@@ -14,18 +14,17 @@ public class TrainerService {
     private final AtomicLong idSeq = new AtomicLong(1);
     private TrainerDao trainerDao;
 
-    public void setTrainerDao(TrainerDao trainerDao) { this.trainerDao = trainerDao; }
-
-    private String generateUniqueUsername(String first, String last) {
-        String base = UsernamePasswordUtil.baseUsername(first, last);
-        List<Trainer> same = trainerDao.findByName(first, last);
-        if (same.isEmpty()) return base;
-        return base + (same.size()+1);
+    public void setTrainerDao(TrainerDao trainerDao) {
+        this.trainerDao = trainerDao;
     }
 
     public Trainer create(Trainer t) {
         t.setId(idSeq.getAndIncrement());
-        t.setUsername(generateUniqueUsername(t.getFirstName(), t.getLastName()));
+        t.setUsername(UsernamePasswordUtil.generateUniqueUsername(
+                t.getFirstName(),
+                t.getLastName(),
+                () -> trainerDao.findByName(t.getFirstName(), t.getLastName())
+        ));
         t.setPassword(UsernamePasswordUtil.randomPassword10());
         trainerDao.create(t.getId(), t);
         log.info("Created Trainer id={} username={}", t.getId(), t.getUsername());
@@ -39,6 +38,11 @@ public class TrainerService {
         return t;
     }
 
-    public Trainer get(Long id) { return trainerDao.findById(id).orElse(null); }
-    public List<Trainer> list() { return trainerDao.findAll(); }
+    public Trainer get(Long id) {
+        return trainerDao.findById(id).orElse(null);
+    }
+
+    public List<Trainer> list() {
+        return trainerDao.findAll();
+    }
 }

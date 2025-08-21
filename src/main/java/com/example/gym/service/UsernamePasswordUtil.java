@@ -1,6 +1,9 @@
 package com.example.gym.service;
 
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class UsernamePasswordUtil {
 
@@ -22,6 +25,14 @@ public final class UsernamePasswordUtil {
         return String.format("%s.%s",
                 first.trim().replaceAll("\\s+", ""),
                 last.trim().replaceAll("\\s+", ""));
+    }
+
+    public static <T> String generateUniqueUsername(String first, String last,
+                                                    Supplier<List<T>> findByName) {
+        String base = baseUsername(first, last);
+        List<T> same = findByName.get();
+        if (same.isEmpty()) return base;
+        return base + (same.size() + 1);
     }
 
 }

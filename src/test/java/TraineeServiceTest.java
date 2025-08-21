@@ -1,8 +1,7 @@
-package com.example.gym.service;
-
 import com.example.gym.dao.TraineeDao;
 import com.example.gym.model.Trainee;
 
+import com.example.gym.service.TraineeService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
