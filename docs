@@ -77,6 +77,17 @@ XxxMapDao → entity-specific queries + wiring the correct storage
 Service layer
 
 private TrainingDao trainingDao;
-The service depends on an interface (TrainingDao), not the implementation (TrainingMapDao).
-This is the Dependency Inversion Principle (part of SOLID).
+
+1. Why do we inject TrainingDao instead of TrainingMapDao?
+
+In the service layer, we want to depend on abstractions (interfaces), not concrete classes.
+
+This follows the Dependency Inversion Principle (DIP) from SOLID: high-level modules (our services) should
+not depend on low-level modules (the map-based DAO). They should both depend on an abstraction.
+
+2. How does Spring know to call TrainingMapDao methods instead of TrainingDao interface methods?
+TrainingDao is an interface.
+TrainingMapDao implements it.
+When Spring injects the bean, it wires the implementation (TrainingMapDao) but exposes it under the
+interface type (TrainingDao).
 
